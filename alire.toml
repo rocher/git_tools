@@ -1,0 +1,14 @@
+name = "git_tools"
+description = "Library to facilitate git commands & API calls"
+version = "0.1.0-dev"
+
+authors = ["Francesc Rocher"]
+maintainers = ["Francesc Rocher <francesc.rocher@gmail.com>"]
+maintainers-logins = ["rocher"]
+licenses = "MIT"
+tags = ["git", "tool", "github", "api"]
+website = "https://github.com/rocher/git_tools"
+
+[[depends-on]]
+simple_logging = "^1.2.0"
+gnat = ">=2021 | (>=12 & <2000)"
