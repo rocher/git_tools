@@ -1,0 +1,16 @@
+name = "git_tools_examples"
+description = "Git Tools - Examples"
+version = "0.1.0-dev"
+
+authors = ["Francesc Rocher"]
+maintainers = ["Francesc Rocher <francesc.rocher@gmail.com>"]
+maintainers-logins = ["rocher"]
+licenses = "MIT"
+tags = ["git", "tool", "github", "api"]
+website = "https://github.com/rocher/git_tools"
+
+executables = ["git_tools_examples"]
+[[depends-on]]
+git_tools = "~0.1.0-dev"
+[[pins]]
+git_tools = { path='..' }
