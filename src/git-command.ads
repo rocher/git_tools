@@ -6,15 +6,11 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-
 package Git.Command is
 
-   type Argument_List is array (Positive range <>) of aliased Unbounded_String;
-
-   function Execute (Command : aliased String) return Boolean;
-   function Execute
-     (Command : aliased String; Arguments : Argument_List) return Boolean;
+   function Execute (Command : String) return Boolean;
+   --  Execute a git command, possibly with arguments, and returns True on
+   --  success (e.g. "status", "pull --all --tags --force").
 
 private
 
