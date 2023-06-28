@@ -6,8 +6,7 @@
 --
 -------------------------------------------------------------------------------
 
-pragma Ada_2022;
-
+with Ada.Directories;
 with Simple_Logging;
 
 with GNAT.OS_Lib;
@@ -23,18 +22,52 @@ package body Git.Command is
    -- Execute --
    -------------
 
-   function Execute (Command : String) return Boolean is
-      Status : Integer;
-      Args   : GNAT.OS_Lib.Argument_List_Access;
+   function Execute
+     (Command : String; Show_Output : Boolean := True) return Boolean
+   is
+      Return_Code : Integer;
+      Args        : GNAT.OS_Lib.Argument_List_Access;
    begin
       if not Setup then
          return False;
       end if;
 
-      Args   := GNAT.OS_Lib.Argument_String_To_List (Command);
-      Status := GNAT.OS_Lib.Spawn (Git_Cmd.all, Args.all);
+      Args := GNAT.OS_Lib.Argument_String_To_List (Command);
+      if not Show_Output then
+         declare
+            Success : Boolean;
+         begin
+            GNAT.OS_Lib.Spawn
+              (Git_Cmd.all, Args.all, "/dev/null", Success, Return_Code);
+         end;
+      else
+         Return_Code := GNAT.OS_Lib.Spawn (Git_Cmd.all, Args.all);
+      end if;
       GNAT.OS_Lib.Free (Args);
-      return (Status = 0);
+      return (Return_Code = 0);
+   end Execute;
+
+   -------------
+   -- Execute --
+   -------------
+
+   function Execute
+     (Directory : String; Command : String; Show_Output : Boolean := True)
+      return Boolean
+   is
+      Success : Boolean;
+      Old_CWD : constant String := Ada.Directories.Current_Directory;
+   begin
+      Ada.Directories.Set_Directory (Directory);
+      Success := Execute (Command, Show_Output);
+      Ada.Directories.Set_Directory (Old_CWD);
+      return Success;
+
+   exception
+      when Ada.Directories.Name_Error =>
+         return False;
+      when Ada.Directories.Use_Error  =>
+         return False;
    end Execute;
 
    -----------
